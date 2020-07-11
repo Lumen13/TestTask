@@ -1,0 +1,23 @@
+﻿<div id="divRowInputName" class="row invisibleName">
+    <div id="divSeparatorName" class="col-4"></div>
+    <div id="divColInputName" class="col-3">
+        <form method="post" class="visableName" action="/Home/Index">
+            <label for="userName">Введите имя: </label>
+            <input class="inputName"
+                   alt="inputName"
+                   placeholder="Василий"
+                   type="text"
+                   name="User.Name"
+                   id="userName" />
+
+            <br /><br />
+
+            <input id="inputSubmitName" type="button" class="btn btn-success inputHider" value="Отправить" onclick="submitName()" />
+        </form>
+    </div>
+</div>
+
+<br /><br />
+
+<canvas class="border border-secondary rounded" id="myCanvas" width="1100" height="500"> </canvas>
+<img src="~/images/ghost.png" id="ghost" class="ghostStyle" />
