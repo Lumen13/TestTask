@@ -8,11 +8,14 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TestTask.Data.IRepository;
+using TestTask.EF.Repository;
 
 namespace TestTask.Web
 {
     public class Startup
     {
+        private IWebHostEnvironment webHostEnvironment { get; set; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -24,11 +27,17 @@ namespace TestTask.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddSingleton<IRepository>(serviceProvider =>
+            {
+                return new Repository(Configuration.GetConnectionString("usersdb"), webHostEnvironment.ContentRootPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            webHostEnvironment = env;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

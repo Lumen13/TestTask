@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TestTask.Data;
+using TestTask.Data.IRepository;
 using TestTask.Web.Models;
 
 namespace TestTask.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IRepository _repository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IRepository repository)
         {
-            _logger = logger;
+            _repository = repository;
         }
 
         [HttpGet]
@@ -28,7 +29,9 @@ namespace TestTask.Web.Controllers
         [HttpPost]
         public IActionResult Index(User user)
         {
-            return View(user);      //need "enter" button catch
+            _repository.PushName(user);
+
+            return View(user);
         }
 
         public IActionResult Privacy()

@@ -5,16 +5,28 @@ namespace TestTask.EF
 {
     public class ApplicationContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
-
-        public ApplicationContext()
+        public ApplicationContext(string connectionString) : base(_getContextOptions(connectionString))
         {
-            Database.EnsureCreated();
+
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        private static DbContextOptions<ApplicationContext> _getContextOptions(string connectionString)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=usersdb;Username=postgres;Password=password");
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
+            optionsBuilder.UseNpgsql(connectionString);
+
+            return optionsBuilder.Options;
+        }
+
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>(builder =>
+            {
+                builder.HasKey(x => x.Id);
+                builder.Property(x => x.Name).HasMaxLength(100);
+            });
         }
     }
 }
